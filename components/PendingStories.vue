@@ -19,7 +19,7 @@ const addMessage = (message: string) => {
 
 const onHover = async (prompt: string) => {
     if (lastViewedPrompt.value !== prompt) {
-        messages.value = ['Connecting to server...']
+        messages.value = ['Connected, waiting for first message...']
         if (eventSource.value) {
             eventSource.value.close()
         }
@@ -67,7 +67,7 @@ const onHover = async (prompt: string) => {
             <template #panel>
                 <UCard class="p-4 w-[80vw] xl:w-[40vw]">
                     <h1 class="text-xl">Writing the perfect story...</h1>
-                    <h2 class="text-zinc-400 mb-4">GPTScript is currently building the story you requested. You can see its progress below.</h2>
+                    <h2 class="text-zinc-400 mb-4">GPTScript is currently writing a story. Curious? You can see what it is thinking below!</h2>
                     <pre class="h-[26vh] bg-zinc-950 px-6 text-white overflow-x-scroll rounded shadow">
                         <p v-for="message in messages">> {{ message }}</p>
                     </pre>

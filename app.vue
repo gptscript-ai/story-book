@@ -12,11 +12,11 @@ useHead({
 
 <template>
   <div>
-    <div class="grid grid-rows-[1fc,1fr] fixed top-0 right-0 bottom-0 left-0">
+    <div class="grid fixed top-0 right-0 bottom-0 left-0">
       <div class="overflow-auto border-t-2 border-transparent">
         <Nav class="absolute right-5 top-5 z-10"/>
-        <div class="p-5 lg:p-10 max-w-full w-full h-full mx-auto">
-          <NuxtPage class="pb-10" />
+        <div class="max-w-full w-full h-full mx-auto">
+          <NuxtPage class="pb-20" />
         </div>
       </div>
     </div>

@@ -62,7 +62,7 @@
 <template>
     <div class="page text-2xl w-full">
         <div class="flex justify-center">
-            <div class="absolute w-full bg-green-200 dark:bg-zinc-950 pt-20 top-0">
+            <div class="w-full bg-green-200 dark:bg-zinc-950 pt-20 md:pt-10">
                 <div class="text-center">
                     <h1 class="text-4xl font-semibold">{{ unmangleStoryName(name) }}</h1>
                     <h2 class="text-2xl font-thin">Page {{ currentPage }}</h2>
@@ -87,7 +87,7 @@
                 icon="i-heroicons-arrow-down-on-square"
             >Export to PDF</UButton>
         </div>
-        <div v-if="Object.keys(pages).length > 0" class="story flex-col xl:flex-row flex content-center justify-center space-y-20 xl:space-x-20 xl:space-y-0 items-center mx-16 mt-52">
+        <div v-if="Object.keys(pages).length > 0" class="story flex-col xl:flex-row flex content-center justify-center space-y-20 xl:space-x-20 xl:space-y-0 items-center mx-16 mt-20">
             <div class="xl:w-1/2 max-w-1/2 text-2xl">
                 <p v-html="pages[currentPage].content" style="white-space: pre-line;"></p>
             </div>
