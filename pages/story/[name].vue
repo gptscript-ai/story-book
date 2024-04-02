@@ -87,7 +87,7 @@
                 icon="i-heroicons-arrow-down-on-square"
             >Export to PDF</UButton>
         </div>
-        <div v-if="Object.keys(pages).length > 0" class="story flex-col xl:flex-row flex content-center justify-center space-y-20 xl:space-x-20 xl:space-y-0 items-center mx-16 mt-20">
+        <div v-if="Object.keys(pages).length > 0" class="flex-col xl:flex-row flex content-center justify-center space-y-20 xl:space-x-20 xl:space-y-0 items-center m-6 lg:m-16">
             <div class="xl:w-1/2 max-w-1/2 text-2xl">
                 <p v-html="pages[currentPage].content" style="white-space: pre-line;"></p>
             </div>
