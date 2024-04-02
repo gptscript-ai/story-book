@@ -12,8 +12,9 @@ export default defineEventHandler(async (event) => {
 
         name = decodeURIComponent(name);
 
-        await fs.promises.readdir(`public/stories/${name}`)
-        fs.promises.rm(`public/stories/${name}`, { recursive: true })
+        const path = useRuntimeConfig().storiesVolumePath
+        await fs.promises.readdir(`${path}/${name}`)
+        fs.promises.rm(`${path}/${name}`, { recursive: true })
     } catch (error) {
         // if the error is a 404 error, we can throw it directly
         if ((error as any).code === 'ENOENT') {

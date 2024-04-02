@@ -44,11 +44,13 @@ export default defineEventHandler(async (event) => {
     });
 
     event._handled = true;
-    await runningScript.promise.then(() => {
+    await runningScript.promise.then((val) => {
+        delete runningScripts[prompt as string];
         event.node.res.write('data: done\n\n');
         event.node.res.end();
     }).catch((error) => {
         setResponseStatus(event, 500);
+        delete runningScripts[prompt as string];
         event.node.res.write(`data: error: ${error}\n\n`);
         event.node.res.end();
     });

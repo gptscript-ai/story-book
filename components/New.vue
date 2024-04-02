@@ -41,7 +41,6 @@ async function onSubmit () {
             } else if ((event.data as string).includes('error')) {
                 es.close()
                 store.removePendingStory(state.prompt)
-
                 toast.add({
                     id: 'story-generating-failed',
                     title: 'Story Generation Failed',
@@ -51,7 +50,6 @@ async function onSubmit () {
                 })
             }
         }
-
         if (state.prompt.length){
             store.addPendingStory(state.prompt, es)
         }
@@ -66,7 +64,6 @@ async function onSubmit () {
     }
 }
 </script>
-
 
 <template>
     <UButton size="lg" class="w-full text-xl" icon="i-heroicons-plus" @click="open = true">New Story</UButton>

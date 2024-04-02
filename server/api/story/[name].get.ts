@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
             if (!file.endsWith('.txt')) continue
             const page = await fs.promises.readFile(`${path}/${name}/${file}`, 'utf-8')
             pages[ file.replace('.txt', '').replace('page', '')] = {
-                image_path: `/stories/${name}/${file.replace('.txt', '.png')}`,
+                image_path: `/api/image/${name}/${file.replace('.txt', '.png')}`,
                 content: page
             }
         }

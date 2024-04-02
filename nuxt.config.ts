@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
   ],
   runtimeConfig: {
-    storiesVolumePath: 'public/stories', // NUXT_STORIES_VOLUME_PATH
+    storiesVolumePath: 'stories', // NUXT_STORIES_VOLUME_PATH
     openaiAPIKey: '' // NUXT_OPENAI_API_KEY
   },
 })
