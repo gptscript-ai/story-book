@@ -32,9 +32,9 @@ export default defineEventHandler(async (event) => {
         });
     }
 
-    const path = useRuntimeConfig().storiesVolumePath
+    const {storiesVolumePath, scriptPath} = useRuntimeConfig()
     const {stdout, stderr, promise} = await gptscript.streamExecFile(
-        'story-book.gpt', `--story ${request.prompt} --pages ${request.pages} --path ${path}`, {})
+        `${scriptPath}`, `--story ${request.prompt} --pages ${request.pages} --path ${storiesVolumePath}`, {})
 
     // mark the script as completed when the promise resolves
     promise.finally(() => {
