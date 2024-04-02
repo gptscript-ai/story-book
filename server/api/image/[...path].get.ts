@@ -1,7 +1,7 @@
 import { createReadStream, existsSync } from 'fs';
 
 export default defineEventHandler(async (event) => {
-    const imagePath = `stories/${getRouterParam(event, 'path')}`;    
+    const imagePath = `${useRuntimeConfig().storiesVolumePath}/${getRouterParam(event, 'path')}`;    
     if (!existsSync(imagePath)) {
         throw createError({
             statusCode: 404,
