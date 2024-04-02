@@ -8,5 +8,6 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     storiesVolumePath: 'public/stories', // NUXT_STORIES_VOLUME_PATH
+    openaiAPIKey: '' // NUXT_OPENAI_API_KEY
   },
 })
