@@ -24,36 +24,7 @@ async function onSubmit () {
             description: 'Your story is being generated. Depending on the length, this may take a few minutes.',
             icon: 'i-heroicons-pencil-square-solid',
         })
-
-        const es = new EventSource(`/api/story/sse?prompt=${state.prompt}`)
-        es.onmessage = async (event) => {
-            store.addPendingStoryMessage(state.prompt, event.data)
-            if ((event.data as string) === 'done') {
-                es.close()
-                store.removePendingStory(state.prompt)
-                store.fetchStories()
-                toast.add({
-                    id: 'story-created',
-                    title: 'Story Created',
-                    description: 'A story you requested has been created.',
-                    icon: 'i-heroicons-check-circle-solid',
-                })
-            } else if ((event.data as string).includes('error')) {
-                es.close()
-                store.removePendingStory(state.prompt)
-                toast.add({
-                    id: 'story-generating-failed',
-                    title: 'Story Generation Failed',
-                    description: `Your story could not be generated due to an error.\n\n${event.data}.`,
-                    icon: 'i-heroicons-x-mark',
-                    timeout: 30000,
-                })
-            }
-        }
-        if (state.prompt.length){
-            store.addPendingStory(state.prompt, es)
-        }
-        open.value = false
+        store.addPendingStory(state.prompt)
     } else {
         toast.add({
             id: 'story-generating-failed',
@@ -61,13 +32,14 @@ async function onSubmit () {
             description: `Your story could not be generated due to an error: ${response.statusText}.`,
             icon: 'i-heroicons-x-mark',
         })
-    }
+    }    
+    open.value = false
 }
 </script>
 
 <template>
     <UButton size="lg" class="w-full text-xl" icon="i-heroicons-plus" @click="open = true">New Story</UButton>
-    <UModal v-if="Object.keys(store.pendingStories).length === 0" v-model="open" :ui="{width: 'sm:max-w-3/4 w-4/5 md:w-3/4 lg:w-1/2', }">
+    <UModal v-model="open" :ui="{width: 'sm:max-w-3/4 w-4/5 md:w-3/4 lg:w-1/2', }">
         <UCard class="h-full">
             <template #header>
                 <div class="flex items-center justify-between">

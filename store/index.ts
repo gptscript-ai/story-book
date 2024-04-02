@@ -4,27 +4,10 @@ import { defineStore } from 'pinia'
 export const useMainStore = defineStore({
     id: 'main',
     state: () => ({
-        pendingStories: {} as Record<string, EventSource>,
-        pendingStoryMessages: {} as Record<string, string[]>,
+        pendingStories: [] as string[],
         stories: [] as string[]
     }),
     actions: {
-        addPendingStory(name: string, es: EventSource) {
-            this.pendingStories[name] = es
-        },
-        removePendingStory(name: string) {
-            this.pendingStories[name].close()
-            delete this.pendingStories[name]
-        },
-        addPendingStoryMessage(name: string, message: string) {
-            if (!this.pendingStoryMessages[name]) {
-                this.pendingStoryMessages[name] = []
-            }
-            this.pendingStoryMessages[name].push(message)
-            if (this.pendingStoryMessages[name].length > 12) {
-                this.pendingStoryMessages[name].shift()
-            }
-        },
         addStory(name: string) {
             this.stories.push(name)
         },
@@ -39,9 +22,23 @@ export const useMainStore = defineStore({
             this.stories = this.stories.filter(s => s !== name)
         },
         async fetchStories() {
-            if (Object.keys(this.pendingStories).length === 0) {
-                this.addStories(await $fetch('/api/story') as string[])
-            }
+            this.addStories(await $fetch('/api/story') as string[])
         },
+        addPendingStory(name: string) {
+            this.pendingStories.push(name)
+        },
+        addPendingStories(names: string[]) {
+            names.forEach(name => {
+                if (!this.pendingStories.includes(name)) {
+                    this.pendingStories.push(name)
+                }
+            })
+        },
+        removePendingStory(name: string) {
+            this.stories = this.stories.filter(s => s !== name)
+        },
+        async fetchPendingStories() {
+            this.pendingStories = await $fetch('/api/story/pending') as string[]
+        }   
     }
 })
