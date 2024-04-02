@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
 
     const path = useRuntimeConfig().storiesVolumePath
     const {stdout, stderr, promise} = await gptscript.streamExecFile(
-        'story-book.gp', `--story ${request.prompt} --pages ${request.pages} --path ${path}`, {})
+        'story-book.gpt', `--story ${request.prompt} --pages ${request.pages} --path ${path}`, {})
 
     setResponseStatus(event, 202)
 
