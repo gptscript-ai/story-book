@@ -10,6 +10,7 @@ export type RunningScript = {
     stdout: Readable;
     stderr: Readable;
     promise: Promise<void>;
+    completed?: boolean;
 }
 
 export const runningScripts: Record<string, RunningScript>= {}
@@ -34,6 +35,13 @@ export default defineEventHandler(async (event) => {
     const path = useRuntimeConfig().storiesVolumePath
     const {stdout, stderr, promise} = await gptscript.streamExecFile(
         'story-book.gpt', `--story ${request.prompt} --pages ${request.pages} --path ${path}`, {})
+
+    // mark the script as completed when the promise resolves
+    promise.finally(() => {
+        if (runningScripts[request.prompt]) {
+            runningScripts[request.prompt].completed = true
+        }
+    });
 
     setResponseStatus(event, 202)
 

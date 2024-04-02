@@ -42,7 +42,6 @@ export const useMainStore = defineStore({
             if (Object.keys(this.pendingStories).length === 0) {
                 this.addStories(await $fetch('/api/story') as string[])
             }
-        }
-
+        },
     }
 })

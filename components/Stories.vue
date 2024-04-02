@@ -8,11 +8,9 @@ const store = useMainStore()
 const pendingStories = computed(() => store.pendingStories)
 const pendingStoryMessages = computed(() => store.pendingStoryMessages)
 const stories = computed(() => store.stories)
-onMounted(async () => store.fetchStories() )
 
-const goToStory = (name: string) => {
-    useRouter().push(`/story/${name}`)
-}
+onMounted(async () => { store.fetchStories() })
+const goToStory = (name: string) => useRouter().push(`/story/${name}`)
 
 const deleteStory = async (name: string) => {
     const response = await fetch(`/api/story/${name}`, { method: 'DELETE' })
