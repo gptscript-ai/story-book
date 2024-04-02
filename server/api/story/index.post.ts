@@ -32,6 +32,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const path = useRuntimeConfig().storiesVolumePath
+    console.log(process.env.OPENAI_API_KEY == '')
     const {stdout, stderr, promise} = await gptscript.streamExecFile(
         'story-book.gpt', `--story ${request.prompt} --pages ${request.pages} --path ${path}`, {})
 
