@@ -38,13 +38,13 @@ async function onSubmit () {
 </script>
 
 <template>
-    <UButton size="lg" class="w-full text-xl" icon="i-heroicons-plus" @click="open = true">New Story</UButton>
-    <UModal v-model="open" :ui="{width: 'sm:max-w-3/4 w-4/5 md:w-3/4 lg:w-1/2', }">
+    <UButton size="lg" color="gray" class="w-full text-xl" icon="i-heroicons-plus" @click="open = true">New Story</UButton>
+    <UModal fullscreen v-model="open" :ui="{width: 'sm:max-w-3/4 w-4/5 md:w-3/4 lg:w-1/2', }">
         <UCard class="h-full">
             <template #header>
                 <div class="flex items-center justify-between">
                     <h1 class="text-2xl">Create a new story</h1>
-                    <UButton variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="open = false" />
+                    <UButton variant="outline" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="open = false" />
                 </div>
             </template>
             <div >

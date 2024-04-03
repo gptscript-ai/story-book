@@ -34,7 +34,7 @@ const goToStory = (name: string) => useRouter().push(`/story/${name}`)
     <div class="flex flex-col space-y-2">        
         <div class="w-full" v-for="story in stories" >
             <!-- The LLM likes to ocassionally, not always, generate folders with "-" and other times with " ", handle both cases for the button -->
-            <UButton truncate :key="story" size="lg" class="w-full text-xl" :label="unmangleStoryName(story)" icon="i-heroicons-book-open" @click="goToStory(story)"/>
+            <UButton truncate color="gray" :key="story" size="lg" class="w-full text-xl" :label="unmangleStoryName(story)" icon="i-heroicons-book-open" @click="goToStory(story)"/>
             <!-- <UButton size="lg" variant="ghost" class="w-1/6 text-xl" icon="i-heroicons-trash" @click="deleteStory(story)"/> -->
         </div>
     </div>

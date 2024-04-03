@@ -16,7 +16,7 @@ const isMenuOpen = ref(false)
                 <div class="flex items-center justify-between">
                     <h3 class="text-4xl">Story Book</h3>
                     <div class="flex space-x-4">
-                        <UButton icon="i-heroicons-x-mark-20-solid" @click="isMenuOpen = false" />
+                        <UButton icon="i-heroicons-x-mark-20-solid" color="white" @click="isMenuOpen = false" />
                     </div>
                 </div>
             </template>

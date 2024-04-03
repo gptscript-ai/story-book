@@ -62,30 +62,29 @@
 <template>
     <div class="page text-2xl w-full">
         <div class="flex justify-center">
-            <div class="w-full bg-green-200 dark:bg-zinc-950 pt-20 md:pt-10">
+            <div class="w-full pt-20 md:pt-10 p-2">
                 <div class="text-center">
-                    <h1 class="text-4xl font-semibold">{{ unmangleStoryName(name) }}</h1>
-                    <h2 class="text-2xl font-thin">Page {{ currentPage }}</h2>
+                    <h1 class="text-4xl font-semibold mb-6">
+                        {{ unmangleStoryName(name) }}
+                    </h1>
+                    <UButton color="gray" @click="exportToPDF"icon="i-heroicons-arrow-down-on-square">Export to PDF</UButton>
                 </div>
-                <UDivider class="mt-10" />
+                <UDivider class="mt-10 text-xl">Page {{ currentPage }}</UDivider>
             </div>
         </div>
         <div class="h-full flex flex-col items-center justify-center">
             <UButton v-if="currentPage > 1" @click="prevPage"
-                class="absolute left-[4vw] top-1/2"
+                class="absolute left-[2vw] top-1/2"
                 :ui="{ rounded: 'rounded-full' }" 
+                color="gray"
                 icon="i-heroicons-arrow-left" 
             />
             <UButton v-if="currentPage < Object.keys(pages).length" @click="nextPage"
-                class="absolute right-[4vw] top-1/2"
+                class="absolute right-[2vw] top-1/2"
                 :ui="{ rounded: 'rounded-full' }"
+                color="gray"
                 icon="i-heroicons-arrow-right"
             />
-            <UButton @click="exportToPDF"
-                class="absolute right-[4vw] bottom-[4vh]"
-                :ui="{ rounded: 'rounded-full' }"
-                icon="i-heroicons-arrow-down-on-square"
-            >Export to PDF</UButton>
         </div>
         <div v-if="Object.keys(pages).length > 0" class="flex-col xl:flex-row flex content-center justify-center space-y-20 xl:space-x-20 xl:space-y-0 items-center m-6 lg:m-16">
             <div class="xl:w-1/2 max-w-1/2 text-2xl">
