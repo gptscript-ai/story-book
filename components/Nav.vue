@@ -4,8 +4,7 @@ const isMenuOpen = ref(false)
 
 <template>
   <div>
-    <div class="flex w-full p-10 justify-end">
-        
+    <div class="flex w-full p-4 md:p-10 justify-end">
         <UButton size="xl" icon="i-heroicons-bars-3" color="white" @click="isMenuOpen = true" />
     </div>
 
