@@ -18,7 +18,7 @@ Do the following steps sequentially:
    - For the content of the page, write it to `${path}/${story-title}/page<page-number>.txt.
    - Call story-illustrator to illustrate it. Be sure to include any relevant characters to include when
      asking it to illustrate the page.
-   - Download the illustration to a file at `${path}/${story-title}/page<page_number>.jpg`.
+   - Download the illustration to a file at `${path}/${story-title}/page<page_number>.png`.
 8. If some part of this process fails, for whatever reason, abort the process and cite the reason why. When doing
    this, remove the files you created.
 
