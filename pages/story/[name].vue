@@ -8,12 +8,14 @@
     const name = route.params.name as string
     const pages = ref<Pages>({})
     const currentPage = ref(1)
+    const pdfCreating = ref(false)
 
     onMounted(async () => pages.value = await $fetch(`/api/story/${name}`) as Pages )
     const nextPage = () => currentPage.value++
     const prevPage = () => currentPage.value--
 
-    const exportToPDF = () => {
+    const exportToPDF = async () => {
+        pdfCreating.value = true
         const doc = new jsPDF()
 
         // Add the title page
@@ -56,6 +58,7 @@
 
         doc.deletePage(doc.internal.pages.length - 1) // a small hack to remove the last empty page that gets added
         doc.save(`${name}.pdf`)
+        pdfCreating.value = false
     }
 </script>
 
@@ -67,7 +70,7 @@
                     <h1 class="text-4xl font-semibold mb-6">
                         {{ unmangleStoryName(name) }}
                     </h1>
-                    <UButton color="gray" @click="exportToPDF"icon="i-heroicons-arrow-down-on-square">Export to PDF</UButton>
+                    <UButton :loading="pdfCreating" color="gray" @click="exportToPDF"icon="i-heroicons-arrow-down-on-square">Download</UButton>
                 </div>
                 <UDivider class="mt-10 text-xl">Page {{ currentPage }}</UDivider>
             </div>
