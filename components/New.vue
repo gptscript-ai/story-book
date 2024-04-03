@@ -24,7 +24,7 @@ async function onSubmit () {
             description: 'Your story is being generated. Depending on the length, this may take a few minutes.',
             icon: 'i-heroicons-pencil-square-solid',
         })
-        store.addPendingStory(state.prompt)
+        store.fetchPendingStories()
     } else {
         toast.add({
             id: 'story-generating-failed',

@@ -1,15 +1,15 @@
 import { runningScripts } from '@/server/api/story/index.post';
 
 export default defineEventHandler(async (event) => {
-    const { prompt } = getQuery(event);
-    if (!prompt) {
+    const { id } = getQuery(event);
+    if (!id) {
         throw createError({
             statusCode: 400,
             statusMessage: 'prompt is required'
         });
     }
 
-    const runningScript = runningScripts[prompt as string];
+    const runningScript = runningScripts[id as string];
     if (!runningScript) {
         throw createError({
             statusCode: 404,
@@ -44,13 +44,13 @@ export default defineEventHandler(async (event) => {
     });
 
     event._handled = true;
-    await runningScript.promise.then((val) => {
-        delete runningScripts[prompt as string];
+    await runningScript.promise.then(() => {
+        delete runningScripts[id as string];
         event.node.res.write('data: done\n\n');
         event.node.res.end();
     }).catch((error) => {
         setResponseStatus(event, 500);
-        delete runningScripts[prompt as string];
+        delete runningScripts[id as string];
         event.node.res.write(`data: error: ${error}\n\n`);
         event.node.res.end();
     });

@@ -1,11 +1,11 @@
 import { runningScripts } from '@/server/api/story/index.post';
 export default defineEventHandler(async () => {
-    Object.keys(runningScripts).forEach((key) => {
+    return Object.keys(runningScripts).map((id) => {
         // if the script is done, remove it
-        if (runningScripts[key].completed) {
-            delete runningScripts[key];
+        if (runningScripts[id].completed) {
+            delete runningScripts[id];
         }
-    });
 
-    return Object.keys(runningScripts);
+        return {id, prompt: runningScripts[id]?.prompt}
+    });
 });

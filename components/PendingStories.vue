@@ -3,7 +3,7 @@ import { useMainStore } from '@/store'
 const store = useMainStore()
 const toast = useToast()
 const pendingStories = computed(() => store.pendingStories)
-const lastViewedPrompt= ref('')
+const lastViewedId= ref('')
 const messages = ref<string[]>([])
 const MAX_MESSAGES = 20
 const eventSource = ref<EventSource>()
@@ -17,18 +17,18 @@ const addMessage = (message: string) => {
     }
 }
 
-const onHover = async (prompt: string) => {
-    if (lastViewedPrompt.value !== prompt) {
+const onHover = async (id: string) => {
+    if (lastViewedId.value !== id) {
         messages.value = ['Connected, waiting for first message...']
         if (eventSource.value) {
             eventSource.value.close()
         }
-        lastViewedPrompt.value = prompt
+        lastViewedId.value = id
     } else {
         return
     }
 
-    const es = new EventSource(`/api/story/sse?prompt=${prompt}`)
+    const es = new EventSource(`/api/story/sse?id=${id}`)
     es.onmessage = async (event) => {
         addMessage(event.data)
         if ((event.data as string) === 'done') {
@@ -44,7 +44,6 @@ const onHover = async (prompt: string) => {
         } else if ((event.data as string).includes('error')) {
             es.close()
             store.fetchPendingStories()
-            store.removePendingStory(prompt)
             toast.add({
                 id: 'story-generating-failed',
                 title: 'Story Generation Failed',
@@ -61,8 +60,8 @@ const onHover = async (prompt: string) => {
 <template>
     <div class="flex flex-col space-y-2">
         <New class="w-full"/>
-        <UPopover mode="hover" v-for="prompt in pendingStories" >
-            <UButton truncate loading :key="prompt" size="lg" class="w-full text-xl" color="white" :label="prompt" icon="i-heroicons-book-open" @mouseover="onHover(prompt)"/>
+        <UPopover mode="hover" v-for="ps in pendingStories" >
+            <UButton truncate loading :key="ps.id" size="lg" class="w-full text-xl" color="white" :label="ps.prompt" icon="i-heroicons-book-open" @mouseover="onHover(ps.id)"/>
 
             <template #panel>
                 <UCard class="p-4 w-[80vw] xl:w-[40vw]">

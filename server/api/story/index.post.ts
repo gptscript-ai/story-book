@@ -7,6 +7,7 @@ type Request = {
 }
 
 export type RunningScript = {
+    prompt: string;
     stdout: Readable;
     stderr: Readable;
     promise: Promise<void>;
@@ -36,18 +37,22 @@ export default defineEventHandler(async (event) => {
     const {stdout, stderr, promise} = await gptscript.streamExecFile(
         `${scriptPath}`, `--story ${request.prompt} --pages ${request.pages} --path ${storiesVolumePath}`, {})
 
+    const id = Math.random().toString(36).substring(2, 14);
+
     // mark the script as completed when the promise resolves
     promise.finally(() => {
-        if (runningScripts[request.prompt]) {
-            runningScripts[request.prompt].completed = true
+        if (runningScripts[id]) {
+            runningScripts[id].completed = true
         }
     });
 
-    setResponseStatus(event, 202)
-
-    runningScripts[request.prompt] = {
+    runningScripts[id] = {
         stdout: stdout,
         stderr: stderr,
-        promise: promise
+        promise: promise,
+        prompt: request.prompt
     }
+
+    setResponseStatus(event, 202)
+    event.node.res.end()
 })
