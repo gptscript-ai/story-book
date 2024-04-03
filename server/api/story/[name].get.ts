@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path';
 
 type Pages = Record<string, Page>;
 type Page = {
@@ -18,14 +19,13 @@ export default defineEventHandler(async (event) => {
 
         name = decodeURIComponent(name);
 
-        const path = useRuntimeConfig().storiesVolumePath
-        const files = await fs.promises.readdir(`${path}/${name}`)
-
+        const storiesVolumePath = useRuntimeConfig().storiesVolumePath
+        const files = await fs.promises.readdir(path.join(storiesVolumePath, name));
         const pages: Pages = {};
         for (const file of files) {
             if (!file.endsWith('.txt')) continue
-            const page = await fs.promises.readFile(`${path}/${name}/${file}`, 'utf-8')
-            pages[ file.replace('.txt', '').replace('page', '')] = {
+            const page = await fs.promises.readFile(path.join(storiesVolumePath, name, file), 'utf-8');
+            pages[file.replace('.txt', '').replace('page', '')] = {
                 image_path: `/api/image/${name}/${file.replace('.txt', '')}`,
                 content: page
             }

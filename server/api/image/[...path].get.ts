@@ -1,8 +1,9 @@
 import { existsSync } from 'fs';
 import sharp from 'sharp';
+import path from 'path';
 
 export default defineEventHandler(async (event) => {
-    const imagePath = `${useRuntimeConfig().storiesVolumePath}/${getRouterParam(event, 'path')}.png`;    
+    const imagePath = path.join(useRuntimeConfig().storiesVolumePath, `${getRouterParam(event, 'path')}.png`);    
     if (!existsSync(imagePath)) {
         throw createError({
             statusCode: 404,
