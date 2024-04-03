@@ -4,10 +4,9 @@ const isMenuOpen = ref(false)
 
 <template>
   <div>
-    <div class="flex space-x-4">
-        <DisplayMode color="white"/>
-        <UButton icon="i-heroicons-home" color="white" @click="() => { useRouter().push('/'); isMenuOpen = false }" />
-        <UButton icon="i-heroicons-bars-3" color="white" @click="isMenuOpen = true" />
+    <div class="flex w-full p-10 justify-end">
+        
+        <UButton size="xl" icon="i-heroicons-bars-3" color="white" @click="isMenuOpen = true" />
     </div>
 
     <USlideover v-model="isMenuOpen">
@@ -16,11 +15,13 @@ const isMenuOpen = ref(false)
                 <div class="flex items-center justify-between">
                     <h3 class="text-4xl">Story Book</h3>
                     <div class="flex space-x-4">
-                        <UButton icon="i-heroicons-x-mark-20-solid" color="white" @click="isMenuOpen = false" />
-                    </div>
+                        <DisplayMode size="lg" color="white"/>
+                        <UButton size="lg" icon="i-heroicons-x-mark-20-solid" color="white" @click="isMenuOpen = false" />
+                    </div>    
                 </div>
+                <UButton color="gray" class="mt-6 text-xl w-full" size="xl" label="Home" icon="i-heroicons-home" @click="() => { useRouter().push('/'); isMenuOpen = false }"/>
             </template>
-            <Stories />
+            <Stories @click="(isMenuOpen = false)"/>
         </UCard>
     </USlideover>
   </div>
