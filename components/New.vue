@@ -44,7 +44,7 @@ async function onSubmit () {
             <template #header>
                 <div class="flex items-center justify-between">
                     <h1 class="text-2xl">Create a new story</h1>
-                    <UButton variant="outline" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="open = false" />
+                    <UButton color="white" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="open = false" />
                 </div>
             </template>
             <div >
@@ -53,9 +53,9 @@ async function onSubmit () {
                         <USelectMenu class="w-1/4 md:w-1/6"v-model="state.pages" :options="pageOptions"/>
                     </UFormGroup>
                     <UFormGroup class="my-6" label="Story" name="prompt">
-                        <UTextarea :ui="{base: 'h-[20vh]'}" size="xl" class="" v-model="state.prompt" label="Prompt" placeholder="Put your full story here or prompt for a new one"/>
+                            <UTextarea :ui="{base: 'h-[50vh]'}" size="xl" class="" v-model="state.prompt" label="Prompt" placeholder="Put your full story here or prompt for a new one"/>
                     </UFormGroup>
-                    <UButton size="xl" icon="i-heroicons-book-open" type="submit">Create Story</UButton>
+                    <UButton size="xl" color="white" icon="i-heroicons-book-open" type="submit">Create Story</UButton>
                 </UForm>
             </div>
         </UCard>    
