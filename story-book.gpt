@@ -1,4 +1,4 @@
-tools: story-writer, story-illustrator, mkdir, sys.write, sys.read, sys.download
+tools: story-writer, story-illustrator, mkdir, sys.write, sys.read, sys.download, sys.abort, sys.remove
 description: Writes a children's book and generates illustrations for it.
 args: story: The story to write and illustrate. Can be a prompt or a complete story.
 args: pages: The number of pages to generate
@@ -6,17 +6,21 @@ args: path: The path that the story should be written to
 
 Do the following steps sequentially:
 
-1. Come up with an appropriate title for the story based on the ${prompt}
-2. Create the `${path}/${story-title}` directory if it does not already exist. Replace any spaces in the title
+1. If the ${prompt} is inappropriate for children, abort the process and site the reason why.
+2. Come up with an appropriate title for the story based on the ${prompt}
+3. Create the `${path}/${story-title}` directory if it does not already exist. Replace any spaces in the title
    with - when creating the directory.
-3. If ${story} is a prompt and not a complete children's story, call story-writer
+4. If ${story} is a prompt and not a complete children's story, call story-writer
    to write a story based on the prompt.
-4. Take ${story} and break it up into ${pages} logical "pages" of text.
-5. For each page:
+5. If the generated story is not appropriate for children, abort the process and cite the reason why.
+6. Take ${story} and break it up into ${pages} logical "pages" of text.
+7. For each page:
    - For the content of the page, write it to `${path}/${story-title}/page<page-number>.txt.
    - Call story-illustrator to illustrate it. Be sure to include any relevant characters to include when
      asking it to illustrate the page.
    - Download the illustration to a file at `${path}/${story-title}/page<page_number>.png`.
+8. If some part of this process fails, for whatever reason, abort the process and cite the reason why. When doing
+   this, remove the files you created.
 
 ---
 name: story-writer
