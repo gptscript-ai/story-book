@@ -9,5 +9,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     scriptPath: 'story-book.gpt', // NUXT_SCRIPT_PATH
     storiesVolumePath: 'stories', // NUXT_STORIES_VOLUME_PATH
+    gptscriptCachePath: '' // NUXT_GPTSCRIPT_CACHE_PATH
   },
 })

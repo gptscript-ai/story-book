@@ -33,9 +33,11 @@ export default defineEventHandler(async (event) => {
         });
     }
 
-    const {storiesVolumePath, scriptPath} = useRuntimeConfig()
+    const {storiesVolumePath, scriptPath, gptscriptCachePath} = useRuntimeConfig()
+    const opts: { cacheDir?: string } = gptscriptCachePath ? { cacheDir: gptscriptCachePath } : {}
+    console.log(opts)
     const {stdout, stderr, promise} = await gptscript.streamExecFile(
-        `${scriptPath}`, `--story ${request.prompt} --pages ${request.pages} --path ${storiesVolumePath}`, {})
+        `${scriptPath}`, `--story ${request.prompt} --pages ${request.pages} --path ${storiesVolumePath}`, opts)
 
     const id = Math.random().toString(36).substring(2, 14);
 
