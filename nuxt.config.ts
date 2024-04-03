@@ -9,6 +9,5 @@ export default defineNuxtConfig({
   runtimeConfig: {
     scriptPath: 'story-book.gpt', // NUXT_SCRIPT_PATH
     storiesVolumePath: 'stories', // NUXT_STORIES_VOLUME_PATH
-    openaiAPIKey: '' // NUXT_OPENAI_API_KEY
   },
 })
