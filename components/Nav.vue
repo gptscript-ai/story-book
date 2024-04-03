@@ -11,7 +11,7 @@ const openGPTScript = () => window.open('https://github.com/gptscript-ai/gptscri
     </div>
 
     <USlideover v-model="isMenuOpen">
-        <UCard class="flex flex-col flex-1" :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+        <UCard class="flex flex-col flex-1 overflow-y-scroll" :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
             <template #header>
                 <div class="flex items-center justify-between">
                     <h3 class="text-4xl">Story Book</h3>
