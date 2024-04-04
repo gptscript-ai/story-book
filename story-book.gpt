@@ -10,17 +10,21 @@ Do the following steps sequentially:
 2. Come up with an appropriate title for the story based on the ${prompt}
 3. Create the `${path}/${story-title}` directory if it does not already exist. Replace any spaces in the title
    with - when creating the directory.
-4. If ${story} is a prompt and not a complete children's story, call story-writer
-   to write a story based on the prompt.
+4. If ${story} is a prompt and not a complete children's story, call story-writer to write a story based on the prompt.
 5. If the generated story is not appropriate for children, abort the process and cite the reason why.
-6. Take ${story} and break it up into ${pages} logical "pages" of text.
-7. For each page:
+6. Read the story and determine what characters there are. Write a list with an extensive description
+   of their physical appearance to ${characters}. Be sure to include things like hair color, skin tone,
+   hair style, species, and any other signiciant characteristics.
+7. Take ${story} and break it up into ${pages} logical "pages" of text.
+8. Determine what ${style} that illustrations of this story should be written in. If the user provided one in their
+   ${prompt}, use that in the following step.
+9. For each page:
    - For the content of the page, write it to `${path}/${story-title}/page<page-number>.txt.
    - Call story-illustrator to illustrate it. Be sure to include any relevant characters to include when
-     asking it to illustrate the page.
+     asking it to illustrate the page along with the style that the story is illustrated in.
    - Download the illustration to a file at `${path}/${story-title}/page<page_number>.png`.
-8. If some part of this process fails, for whatever reason, abort the process and cite the reason why. When doing
-   this, remove the files you created.
+10. If some part of this process fails, for whatever reason, abort the process and cite the reason why. When doing
+    this, remove the files you created.
 
 ---
 name: story-writer
@@ -28,18 +32,23 @@ description: Writes a story for children
 args: prompt: The prompt to use for the story
 temperature: 1
 
-Write a story with a tone for children based on ${prompt}.
+You are an accomplished children's story writer. You like to write with a style that is appropriate for children but
+is still interesting to read. With your style, write a story based on ${prompt}.
 
 ---
 name: story-illustrator
 tools: github.com/gptscript-ai/image-generation
 description: Generates a illustration for a children's story
+temperature: 1
 args: text: The text of the page to illustrate
+args: characters: The characters of the story and their physical apperance
+args: style: The style that the image should be generated in.
 
-Think of a good prompt to generate an image to represent $text. Make sure to
-include the name of any relevant characters in your prompt. Then use that prompt to
-generate an illustration. Append any prompt that you have with ". In an pointilism cartoon
-children's book style with no text in it". Only return the URL of the illustration.
+Think of a good prompt to generate an image to represent ${text}. Do not include the name of
+any characters in your prompt, just use their physical descriptions in ${characters} instead
+to ensure they look like they should. Then use that prompt to generate an illustration. Append
+any prompt that you have with ". In an ${style} children's book style. DO NOT INCLUDE TEXT EVER.".
+Only return the URL of the illustration.
 
 ---
 name: mkdir
