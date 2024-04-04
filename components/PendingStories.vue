@@ -1,85 +1,67 @@
 <script setup lang="ts">
 import { useMainStore } from '@/store'
+import type { StreamEvent } from '@/lib/types'
 const store = useMainStore()
 const toast = useToast()
 const pendingStories = computed(() => store.pendingStories)
-const lastViewedId= ref('')
-const messages = ref<string[]>([])
-const MAX_MESSAGES = 20
-const eventSource = ref<EventSource>()
-
-onMounted(async () => { store.fetchPendingStories() })
-
-const addMessage = (message: string) => {
-    messages.value.push(message)
-    if (messages.value.length > MAX_MESSAGES) {
-        messages.value.shift()
-    }
+const previousMessages = ref<Record<string, string>>({})
+const messages = ref<Record<string, string>>({})
+const addMessage = (id:string, message: string) => {
+    if (!messages.value[id]) messages.value[id] = ''
+    if (!message) return
+    messages.value[id] += message
 }
 
-const onHover = async (id: string) => {
-    if (lastViewedId.value !== id) {
-        messages.value = ['Connected, waiting for first message...']
-        if (eventSource.value) {
-            eventSource.value.close()
-        }
-        lastViewedId.value = id
-    } else {
-        return
-    }
+onMounted(async () => store.fetchPendingStories() )
+onBeforeUnmount(() => messages.value = {})
+onBeforeMount(() => { 
+    new EventSource('/api/story/sse').onmessage = (event) => {
+        const e = JSON.parse(event.data) as StreamEvent
+        addMessage(e.id, e.message)
 
-    const es = new EventSource(`/api/story/sse?id=${id}`)
-    es.onmessage = async (event) => {
-        addMessage(event.data)
-        if ((event.data as string) === 'done') {
-            es.close()
-            store.fetchPendingStories()
+        if (e.final) {
             store.fetchStories()
-            toast.add({
-                id: 'story-created',
-                title: 'Story Created',
-                description: `A story you requested has been created.`,
-                icon: 'i-heroicons-check-circle-solid',
-            })
-        } else if ((event.data as string).includes('done:') ){
-            es.close()
+            if (e.error) {
+                const truncatedPrompt = pendingStories.value[e.id].length > 50 ? pendingStories.value[e.id].substring(0, 50) + '...' : pendingStories.value[e.id]
+                toast.add({
+                    id: 'story-generating-failed',
+                    title: `"${truncatedPrompt}" Generation Failed`,
+                    description: `${previousMessages.value[e.id]}.`,
+                    icon: 'i-heroicons-x-mark',
+                    timeout: 30000,
+                })
+            } else {
+                toast.add({
+                    id: 'story-created',
+                    title: 'Story Created',
+                    description: `A story you requested has been created.`,
+                    icon: 'i-heroicons-check-circle-solid',
+                })
+            }
+            delete messages.value[e.id]
             store.fetchPendingStories()
-            let message = event.data.substring(event.data.indexOf('done:') + 5).replace('\n', '')
-            toast.add({
-                id: 'story-generating-failed',
-                title: 'Story Generation Failed',
-                description: `Your story could not be generated due to an error: ${message}.`,
-                icon: 'i-heroicons-x-mark',
-                timeout: 30000,
-            })
-        } else if ((event.data as string).includes('error')) {
-            es.close()
-            store.fetchPendingStories()
-            toast.add({
-                id: 'story-generating-failed',
-                title: 'Story Generation Failed',
-                description: `Your story could not be generated due to an error: ${event.data}.`,
-                icon: 'i-heroicons-x-mark',
-                timeout: 30000,
-            })
         }
-    }
-    eventSource.value = es
-}
+
+        // Previous message is stored for error handling. When an error occurs, the previous message is the error message.
+        if (messages.value[e.id]) {
+            previousMessages.value[e.id] = e.message
+        }
+    }}
+)
 </script>
 
 <template>
     <div class="flex flex-col space-y-2">
         <New class="w-full"/>
-        <UPopover mode="hover" v-for="ps in pendingStories" >
-            <UButton truncate loading :key="ps.id" size="lg" class="w-full text-xl" color="white" :label="ps.prompt" icon="i-heroicons-book-open" @mouseover="onHover(ps.id)"/>
+        <UPopover mode="hover" v-for="(prompt, id) in pendingStories" >
+            <UButton truncate loading :key="id" size="lg" class="w-full text-xl" color="white" :label="prompt" icon="i-heroicons-book-open"/>
 
             <template #panel>
                 <UCard class="p-4 w-[80vw] xl:w-[40vw]">
                     <h1 class="text-xl">Writing the perfect story...</h1>
                     <h2 class="text-zinc-400 mb-4">GPTScript is currently writing a story. Curious? You can see what it is thinking below!</h2>
-                    <pre class="h-[26vh] bg-zinc-950 px-6 text-white overflow-x-scroll rounded shadow">
-                        <p v-for="message in messages">> {{ message }}</p>
+                    <pre class="h-[26vh] bg-zinc-950 px-6 text-white overflow-scroll rounded shadow flex flex-col-reverse" style="white-space: pre-line;">
+                        {{ messages[id] ? messages[id] : 'Waiting for response...'}}
                     </pre>
                 </UCard>
             </template>
