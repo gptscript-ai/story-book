@@ -12,6 +12,8 @@ export type RunningScript = {
     stderr: Readable;
     promise: Promise<void>;
     completed?: boolean;
+    failure?: boolean;
+    finalMessage?: string;
 }
 
 export const runningScripts: Record<string, RunningScript>= {}
@@ -35,18 +37,17 @@ export default defineEventHandler(async (event) => {
 
     const {storiesVolumePath, scriptPath, gptscriptCachePath} = useRuntimeConfig()
     const opts: { cacheDir?: string } = gptscriptCachePath ? { cacheDir: gptscriptCachePath } : {}
-    console.log(opts)
     const {stdout, stderr, promise} = await gptscript.streamExecFile(
         `${scriptPath}`, `--story ${request.prompt} --pages ${request.pages} --path ${storiesVolumePath}`, opts)
 
     const id = Math.random().toString(36).substring(2, 14);
 
     // mark the script as completed when the promise resolves
-    promise.finally(() => {
-        if (runningScripts[id]) {
-            runningScripts[id].completed = true
-        }
-    });
+    stdout.on('data', (data) => { if (runningScripts[id]) runningScripts[id].finalMessage = data.toString() })
+    stderr.on('data', (data) => { if (runningScripts[id]) runningScripts[id].finalMessage = data.toString() })
+    promise
+        .catch(() => { if (runningScripts[id]) runningScripts[id].failure = true })
+        .finally(() => { if (runningScripts[id]) runningScripts[id].completed = true });
 
     runningScripts[id] = {
         stdout: stdout,
