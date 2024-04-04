@@ -12,28 +12,31 @@ Do the following steps sequentially:
    with - when creating the directory.
 4. If ${story} is a prompt and not a complete children's story, call story-writer to write a story based on the prompt.
 5. If the generated story is not appropriate for children, abort the process and cite the reason why.
-6. Read the story and determine what characters there are. Write a list with an extensive description
-   of their physical appearance to ${characters}. Be sure to include things like hair color, skin tone,
-   hair style, species, and any other signiciant characteristics.
-7. Take ${story} and break it up into ${pages} logical "pages" of text.
-8. Determine what ${style} that illustrations of this story should be written in. If the user provided one in their
-   ${prompt}, use that in the following step.
+6. Take ${story} and break it up into ${pages} logical "pages" of text.
 9. For each page:
    - For the content of the page, write it to `${path}/${story-title}/page<page-number>.txt.
-   - Call story-illustrator to illustrate it. Be sure to include any relevant characters to include when
-     asking it to illustrate the page along with the style that the story is illustrated in.
+   - Call story-illustrator to illustrate it. Be sure to include the character's description list and illustration style you
+     got from the story-writer when asking story-illustrator to illustrate the page.
    - Download the illustration to a file at `${path}/${story-title}/page<page_number>.png`.
 10. If some part of this process fails, for whatever reason, abort the process and cite the reason why. When doing
     this, remove the files you created.
 
 ---
 name: story-writer
-description: Writes a story for children
+description: Writes a story for children. Returns a story, illustration style, and a list of characters with their physical descriptions.
 args: prompt: The prompt to use for the story
 temperature: 1
 
 You are an accomplished children's story writer. You like to write with a style that is appropriate for children but
 is still interesting to read. With your style, write a story based on ${prompt}.
+
+Along with the story, write an extensive description of each character's physical appearance. Be sure to include 
+things like hair color, skin tone, hair style, species, and any other signiciant characteristics.
+
+Finally, determine what style that illustrations of this story should be written in. If the ${prompt} provides one, use
+that.
+
+Return your story, illustration style, and character descriptions.
 
 ---
 name: story-illustrator

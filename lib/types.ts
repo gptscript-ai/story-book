@@ -5,7 +5,9 @@ export type Page = {
     content: string;
 }
 
-export type PendingStory = {
+export type StreamEvent = {
     id: string;
-    prompt: string;
+    message: string;
+    final?: boolean;
+    error?: boolean;
 }

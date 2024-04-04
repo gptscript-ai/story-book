@@ -1,12 +1,11 @@
 // store/index.ts
 import { defineStore } from 'pinia'
-import type { PendingStory } from '@/lib/types'
 
 export const useMainStore = defineStore({
     id: 'main',
     state: () => ({
-        pendingStories: [] as PendingStory[],
-        stories: [] as string[]
+        pendingStories: {} as Record<string, string>,
+        stories: [] as string[],
     }),
     actions: {
         addStory(name: string) {
@@ -26,7 +25,7 @@ export const useMainStore = defineStore({
             this.addStories(await $fetch('/api/story') as string[])
         },
         async fetchPendingStories() {
-            this.pendingStories = await $fetch('/api/story/pending') as PendingStory[]
-        }   
+            this.pendingStories = await $fetch('/api/story/pending') as Record<string, string>
+        },
     }
 })
