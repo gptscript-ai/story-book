@@ -38,8 +38,19 @@ const onHover = async (id: string) => {
             toast.add({
                 id: 'story-created',
                 title: 'Story Created',
-                description: 'A story you requested has been created.',
+                description: `A story you requested has been created.`,
                 icon: 'i-heroicons-check-circle-solid',
+            })
+        } else if ((event.data as string).includes('done:') ){
+            es.close()
+            store.fetchPendingStories()
+            let message = event.data.substring(event.data.indexOf('done:') + 5).replace('\n', '')
+            toast.add({
+                id: 'story-generating-failed',
+                title: 'Story Generation Failed',
+                description: `Your story could not be generated due to an error: ${message}.`,
+                icon: 'i-heroicons-x-mark',
+                timeout: 30000,
             })
         } else if ((event.data as string).includes('error')) {
             es.close()
@@ -47,7 +58,7 @@ const onHover = async (id: string) => {
             toast.add({
                 id: 'story-generating-failed',
                 title: 'Story Generation Failed',
-                description: `Your story could not be generated due to an error.\n\n${event.data}.`,
+                description: `Your story could not be generated due to an error: ${event.data}.`,
                 icon: 'i-heroicons-x-mark',
                 timeout: 30000,
             })

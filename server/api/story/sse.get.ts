@@ -24,15 +24,15 @@ export default defineEventHandler(async (event) => {
         'Connection': 'keep-alive',
         'Content-Type': 'text/event-stream',
     });
-    
-    let stdoutBuffer = '';
-    runningScript.stdout.on('data', (data) => {
-        stdoutBuffer += data;
-        if (data.includes('\n')) {
-            event.node.res.write(`data: ${stdoutBuffer}\n\n`);
-            stdoutBuffer = '';
-        }
-    });
+
+    if (runningScript.completed || runningScript.failure) {
+        const message = runningScript.completed ? `done: ${runningScript.finalMessage}` : `error ${runningScript.finalMessage}`;
+        event.node.res.write(`data: ${message}\n\n`);
+        delete runningScripts[id as string];
+        return event.node.res.end();
+    }
+
+    runningScript.stdout.on('data', (data) => event.node.res.write(`data: ${data}\n\n`));
 
     let stderrBuffer = '';
     runningScript.stderr.on('data', (data) => {
@@ -43,15 +43,13 @@ export default defineEventHandler(async (event) => {
         }
     });
 
-    event._handled = true;
-    await runningScript.promise.then(() => {
+    try {
+        await runningScript.promise;
         delete runningScripts[id as string];
         event.node.res.write('data: done\n\n');
-        event.node.res.end();
-    }).catch((error) => {
+    } catch (error) {
         setResponseStatus(event, 500);
-        delete runningScripts[id as string];
         event.node.res.write(`data: error: ${error}\n\n`);
-        event.node.res.end();
-    });
+    }
+    event.node.res.end();
 });
