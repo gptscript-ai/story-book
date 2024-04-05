@@ -1,40 +1,36 @@
-tools: story-writer, story-illustrator, mkdir, sys.write, sys.read, sys.download, sys.abort, sys.remove
+tools: story-writer, story-illustrator, mkdir, sys.write, sys.read, sys.download, sys.abort
 description: Writes a children's book and generates illustrations for it.
 args: story: The story to write and illustrate. Can be a prompt or a complete story.
 args: pages: The number of pages to generate
 args: path: The path that the story should be written to
 
-Do the following steps sequentially:
+Do the following steps one after the other without skipping any or ending early:
 
-1. If the ${prompt} is inappropriate for children, abort the process and site the reason why.
-2. Come up with an appropriate title for the story based on the ${prompt}
+1. If the ${story} is inappropriate for children, abort the process and site the reason why.
+2. Come up with an appropriate title for the story based on the ${story}.
 3. Create the `${path}/${story-title}` directory if it does not already exist. Replace any spaces in the title
    with - when creating the directory.
 4. If ${story} is a prompt and not a complete children's story, call story-writer to write a story based on the prompt.
 5. If the generated story is not appropriate for children, abort the process and cite the reason why.
-6. Take ${story} and break it up into ${pages} logical "pages" of text.
-9. For each page:
+6. For every page of the story you got from the story-writer, do the following:
    - For the content of the page, write it to `${path}/${story-title}/page<page-number>.txt.
    - Call story-illustrator to illustrate it. Be sure to include the character's description list and illustration style you
      got from the story-writer when asking story-illustrator to illustrate the page.
    - Download the illustration to a file at `${path}/${story-title}/page<page_number>.png`.
-10. If some part of this process fails, for whatever reason, abort the process and cite the reason why. When doing
-    this, remove the files you created.
 
 ---
 name: story-writer
-description: Writes a story for children. Returns a story, illustration style, and a list of characters with their physical descriptions.
+description: Writes a story for children. Returns a story, illustration style, list of settings, and a list of characters with their physical descriptions.
 args: prompt: The prompt to use for the story
+args: pages: The number of pages that the story should have.
 temperature: 1
 
 You are an accomplished children's story writer. You like to write with a style that is appropriate for children but
-is still interesting to read. With your style, write a story based on ${prompt}.
-
-Along with the story, write an extensive description of each character's physical appearance. Be sure to include 
-things like hair color, skin tone, hair style, species, and any other signiciant characteristics.
-
-Finally, determine what style that illustrations of this story should be written in. If the ${prompt} provides one, use
-that.
+is still interesting to read. With your style, write a story based on ${prompt} that has ${pages} pages. Along with 
+the story, write an extensive description of each character's physical appearance. Be sure to include things like hair
+color, skin tone, hair style, species, and any other signiciant characteristics. Write an extensive description of
+what settings in the story look like as well. Finally, determine what style that illustrations of this story should
+be written in using 5 or less words. If the ${prompt} provides one, use that.
 
 Return your story, illustration style, and character descriptions.
 
@@ -44,14 +40,21 @@ tools: github.com/gptscript-ai/image-generation
 description: Generates a illustration for a children's story
 temperature: 1
 args: text: The text of the page to illustrate
-args: characters: The characters of the story and their physical apperance
+args: characters: The characters of the story and their physical appearance
+args: settings: The settings of the story and their physical appearance. 
 args: style: The style that the image should be generated in.
 
-Think of a good prompt to generate an image to represent ${text}. Do not include the name of
-any characters in your prompt, just use their physical descriptions in ${characters} instead
-to ensure they look like they should. Then use that prompt to generate an illustration. Append
-any prompt that you have with ". In an ${style} children's book style. DO NOT INCLUDE TEXT EVER.".
-Only return the URL of the illustration.
+Think of a visually interesting prompt to generate an image to represent ${text}. If a character
+is not present in the prompt, do not include them. If a setting is not included in the prompt, do
+not include it. Do not include the name of any characters or settings` in your prompt, just use their physical
+descriptions in ${characters} or ${settings} instead to ensure they look like they should. Check if your prompt
+is safe for children. If it is not, make a new one. Finally, use your prompt to generate an illustration. Append
+any prompt that you have with ". In an ${style} children's book style. DO NOT INCLUDE TEXT EVER.". Only return the
+URL of the illustration.
+
+If your image fails to download, try again with the same prompt.
+If your image fails to generate due to community guidelines, generate a different prompt and try again.
+You are only allowed to try again 2 maximum.
 
 ---
 name: mkdir

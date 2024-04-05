@@ -6,6 +6,7 @@ const toast = useToast()
 const pendingStories = computed(() => store.pendingStories)
 const previousMessages = ref<Record<string, string>>({})
 const messages = ref<Record<string, string>>({})
+const es = ref<EventSource>()
 const addMessage = (id:string, message: string) => {
     if (!messages.value[id]) messages.value[id] = ''
     if (!message) return
@@ -13,11 +14,13 @@ const addMessage = (id:string, message: string) => {
 }
 
 onMounted(async () => store.fetchPendingStories() )
-onBeforeUnmount(() => messages.value = {})
+onBeforeUnmount(() => { es.value?.close() })
 onBeforeMount(() => { 
-    new EventSource('/api/story/sse').onmessage = (event) => {
+    es.value = new EventSource('/api/story/sse')
+    es.value.onmessage = (event) => {
         const e = JSON.parse(event.data) as StreamEvent
         addMessage(e.id, e.message)
+        console.log(e.message)
 
         if (e.final) {
             store.fetchStories()
