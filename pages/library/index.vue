@@ -17,10 +17,10 @@
 </script>
 
 <template>
-    <UCard class="mt-36 mx-10 h-full">
+    <UCard class="mt-36 mx-6 h-full">
         <template #header>
             <h1 class="text-3xl mb-6">Library</h1>
-            <USelectMenu v-model="selectedDate" :options="dates" class="w-1/6"/>
+            <USelectMenu v-model="selectedDate" :options="dates" class="md:w-1/6"/>
         </template>
 
         <div class="flex flex-col space-y-2">
