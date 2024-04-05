@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
+    'nuxt-scheduler'
   ],
   runtimeConfig: {
     scriptPath: 'story-book.gpt', // NUXT_SCRIPT_PATH
