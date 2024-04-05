@@ -2,8 +2,7 @@ import fs from 'fs'
 
 export default defineEventHandler(async (event) => {
     try {
-        const stories = await fs.promises.readdir(useRuntimeConfig().storiesVolumePath)
-        return stories.filter(story => story !== ('library'));
+        return await fs.promises.readdir(useRuntimeConfig().storiesVolumePath+ '/library')
     } catch (error) {
         // if the error is a 404 error, we can throw it directly
         if ((error as any).code === 'ENOENT') {

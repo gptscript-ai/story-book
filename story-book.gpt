@@ -14,8 +14,8 @@ Do the following steps one after the other without skipping any or ending early:
 5. If the generated story is not appropriate for children, abort the process and cite the reason why.
 6. For every page of the story you got from the story-writer, do the following:
    - For the content of the page, write it to `${path}/${story-title}/page<page-number>.txt.
-   - Call story-illustrator to illustrate it. Be sure to include the character's description list and illustration style you
-     got from the story-writer when asking story-illustrator to illustrate the page.
+   - Call story-illustrator to illustrate it. Be sure to include the character's descriptions, setting's decriptions
+     and illustration style you got from the story-writer when asking story-illustrator to illustrate the page.
    - Download the illustration to a file at `${path}/${story-title}/page<page_number>.png`.
 
 ---

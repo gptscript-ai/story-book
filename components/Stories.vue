@@ -2,7 +2,6 @@
 import { useMainStore } from '@/store'
 import unmangleStoryName from '@/lib/unmangle'
 
-const toast = useToast()
 const store = useMainStore()
 const stories = computed(() => store.stories)
 
@@ -32,10 +31,12 @@ const goToStory = (name: string) => useRouter().push(`/story/${name}`)
 
 <template>
     <div class="flex flex-col space-y-2">        
-        <div class="w-full" v-for="story in stories" >
+        <div v-if="stories.length" class="w-full" v-for="story in stories" >
             <!-- The LLM likes to ocassionally, not always, generate folders with "-" and other times with " ", handle both cases for the button -->
             <UButton truncate color="gray" :key="story" size="lg" class="w-full text-xl" :label="unmangleStoryName(story)" icon="i-heroicons-book-open" @click="goToStory(story)"/>
-            <!-- <UButton size="lg" variant="ghost" class="w-1/6 text-xl" icon="i-heroicons-trash" @click="deleteStory(story)"/> -->
+        </div>
+        <div v-else>
+            <p class="text-gray-500">No stories have been made today. Want to be the first?</p>
         </div>
     </div>
 </template>

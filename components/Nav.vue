@@ -23,10 +23,11 @@ const openGPTScript = () => window.open('https://github.com/gptscript-ai/gptscri
                 <UDivider class="mt-4"/>
                 <h3 class="text-2xl mt-4">Navigation</h3>
                 <UButton color="gray" class="mt-6 text-xl w-full" size="xl" label="Home" icon="i-heroicons-home" @click="() => { useRouter().push('/'); isMenuOpen = false }"/>
+                <UButton color="gray" class="mt-2 text-xl w-full" size="xl" label="Library" icon="i-heroicons-rectangle-stack" @click="() => { useRouter().push('/library'); isMenuOpen = false }"/>
                 <UButton color="gray" class="mt-2 text-xl w-full" size="xl" label="Source Code" icon="i-heroicons-arrow-top-right-on-square" @click="() => { openSource(); isMenuOpen = false }"/>
                 <UButton color="gray" class="mt-2 text-xl w-full" size="xl" label="GPTScript" icon="i-heroicons-arrow-top-right-on-square" @click="() => { openGPTScript(); isMenuOpen = false }"/>
             </template>
-            <h3 class="text-2xl mb-6">Stories</h3>
+            <h3 class="text-2xl mb-6">Today's Stories</h3>
             <Stories @click="(isMenuOpen = false)"/>
         </UCard>
     </USlideover>

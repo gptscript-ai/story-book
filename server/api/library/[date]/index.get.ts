@@ -1,9 +1,17 @@
 import fs from 'fs'
+import path from 'path';
 
 export default defineEventHandler(async (event) => {
+    let date = getRouterParam(event, 'date');
+    if (!date) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: 'date is required'
+        });
+    }
+
     try {
-        const stories = await fs.promises.readdir(useRuntimeConfig().storiesVolumePath)
-        return stories.filter(story => story !== ('library'));
+        return await fs.promises.readdir(path.join(useRuntimeConfig().storiesVolumePath, 'library', date))
     } catch (error) {
         // if the error is a 404 error, we can throw it directly
         if ((error as any).code === 'ENOENT') {
