@@ -20,7 +20,6 @@ onBeforeMount(() => {
     es.value.onmessage = (event) => {
         const e = JSON.parse(event.data) as StreamEvent
         addMessage(e.id, e.message)
-        console.log(e.message)
 
         if (e.final) {
             store.fetchStories()
