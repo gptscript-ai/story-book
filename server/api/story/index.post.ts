@@ -1,17 +1,12 @@
 import gptscript from '@gptscript-ai/gptscript'
 import { Readable } from 'stream'
-import type { StreamEvent } from '@/lib/types'
-
-type Request = {
-    prompt: string;
-    pages: number;
-}
+import type { StreamEvent, StoryRequest } from '@/lib/types'
 
 export const runningScripts: Record<string, string>= {}
 export const eventStream = new Readable({read(){}});
 
 export default defineEventHandler(async (event) => {
-    const request = await readBody(event) as Request
+    const request = await readBody(event) as StoryRequest
 
     // Ensure that the request has the required fields
     if (!request.prompt) { throw createError({

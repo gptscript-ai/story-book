@@ -11,3 +11,8 @@ export type StreamEvent = {
     final?: boolean;
     error?: boolean;
 }
+
+export type StoryRequest = {
+    prompt: string;
+    pages: number;
+}

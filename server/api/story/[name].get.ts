@@ -1,11 +1,6 @@
 import fs from 'fs'
 import path from 'path';
-
-type Pages = Record<string, Page>;
-type Page = {
-    image_path: string;
-    content: string;
-}
+import type { Pages } from '@/lib/types';
 
 export default defineEventHandler(async (event) => {
     try {

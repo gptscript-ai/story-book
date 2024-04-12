@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useMainStore } from '@/store'
+import type { StoryRequest } from '@/lib/types'
 
 const store = useMainStore()
 const open = ref(false)
 const pageOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 const toast = useToast()
-const state = reactive({
+const state = reactive<StoryRequest>({
     prompt: '',
     pages: 0,
 })
