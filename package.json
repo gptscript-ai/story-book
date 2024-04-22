@@ -19,6 +19,7 @@
     "pinia": "^2.1.7",
     "sharp": "^0.33.3",
     "vue": "^3.4.21",
+    "vue-gtag-next": "^1.14.0",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {

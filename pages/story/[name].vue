@@ -96,4 +96,4 @@
             <img class="xl:w-2/5" :src="pages[currentPage].image_path" alt="page image" />
         </div>
     </div>
-</template>z
+</template>
